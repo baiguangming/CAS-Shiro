@@ -1,0 +1,10 @@
+/.classpath
+/.project
+/.settings/
+/pom.xml
+/shiro-auth/
+/shiro-base/
+/shiro-realm/
+/shiro-service/
+/shiro-ssm/
+/shiro-web/

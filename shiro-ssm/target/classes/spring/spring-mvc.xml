@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<context:component-scan base-package="cn.mldn"/>
+	<!-- 启用Annotation注解模式来进行SpringMVC的配置 -->
+	<mvc:annotation-driven/>
+	<!-- 表示启用Servlet来处理请求 -->
+	<mvc:default-servlet-handler/>
+		<!-- 现在需要在控制层之中启用注解进行认证与授权的检测，所以此时需要做一个AOP的代理配置 -->
+	<bean id="controllerDefaultAdvisorAutoProxyCreator"
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor"> 
+		<!-- 设置为代理的目标类型对象 -->
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<!-- 配置一个针对于安全管理器的AOP程序功能类 -->
+	<bean id="controllerAuthorizationAttributeSourceAdvisor"
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<!-- 表示此时需要针对于安全管理器进行AOP的切割处理 -->
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	
+</beans>
